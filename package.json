@@ -1,0 +1,70 @@
+{
+  "name": "take-a-break",
+  "version": "1.0.0",
+  "description": "Take a break :-P",
+  "main": "dist/bin.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "/assets",
+    "/dist"
+  ],
+  "bin": {
+    "tab": "./dist/bin.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "build": "run-s clean:dist build:ts",
+    "clean:dist": "rimraf dist/",
+    "build:ts": "tsc",
+    "start:dev": "./node_modules/.bin/ts-node src/bin.ts",
+    "start": "node dist/bin.js"
+  },
+  "iohook": {
+    "targets": [
+      "node-83"
+    ],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajeshd50/take-a-break.git"
+  },
+  "keywords": [
+    "take-a-break",
+    "break",
+    "time-doctor"
+  ],
+  "author": "Rajesh Dan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajeshd50/take-a-break/issues"
+  },
+  "homepage": "https://github.com/rajeshd50/take-a-break#readme",
+  "devDependencies": {
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^16.9.2",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.12.28",
+    "mocha": "^9.1.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "iohook": "0.6.6",
+    "minimist": "^1.2.5",
+    "robotjs": "^0.6.0"
+  }
+}
