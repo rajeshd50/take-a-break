@@ -1,7 +1,7 @@
 {
-  "name": "take-a-break",
+  "name": "give-me-break",
   "version": "1.0.0",
-  "description": "Take a break :-P",
+  "description": "Give me a break from time trackers :-P",
   "main": "dist/bin.js",
   "engines": {
     "node": ">=14.0.0"
@@ -12,7 +12,7 @@
     "/dist"
   ],
   "bin": {
-    "tab": "./dist/bin.js"
+    "gmb": "./dist/bin.js"
   },
   "scripts": {
     "test": "mocha",

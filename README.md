@@ -8,17 +8,17 @@ Node >= v14.x.x required
 ## Install instruction
 
 ```bash
-npm install -g take-a-break
+npm install -g give-me-break
 ```
 or
 ```bash
-yarn global add take-a-break
+yarn global add give-me-break
 ```
 
 After installation done, open terminal and run
 
 ```bash
-tab
+gmb
 ```
 
 To stop type 
