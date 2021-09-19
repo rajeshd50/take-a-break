@@ -13,8 +13,8 @@ class App extends abstract_command_1.AbstractCommand {
         super();
         this.screenHeight = 0;
         this.screenWidth = 0;
-        this.keyboardInterval = null;
-        this.mouseInterval = null;
+        this.workProcessInterval = null;
+        this.counter = 0;
         const screenSize = robotjs_1.default.getScreenSize();
         this.screenHeight = screenSize.height;
         this.screenWidth = screenSize.width;
@@ -22,75 +22,68 @@ class App extends abstract_command_1.AbstractCommand {
         iohook_1.default.registerShortcut([29, 20], (keys) => {
             iohook_1.default.stop();
             this.writeStdOut('Stopping tab');
-            this.stopRobotMouse();
-            this.startRobotKeyboard();
+            this.stopRobotRandomEvents();
             process.exit(0);
         });
     }
     async run() {
         try {
             this.writeStdOut('Starting tab, press `Ctrl+T` to stop');
-            await this.startRobotMouse();
+            await this.startRobotRandomEvents();
             return true;
         }
         catch (e) {
             return e;
         }
     }
-    async startRobotKeyboard() {
+    async startRobotRandomEvents() {
         try {
-            if (this.keyboardInterval) {
-                clearInterval(this.keyboardInterval);
+            if (this.workProcessInterval) {
+                clearInterval(this.workProcessInterval);
             }
-            this.keyboardInterval = setInterval(() => {
-                this.sendRandomKeys();
-            }, 1000 * 60);
-        }
-        catch (e) {
-            return e;
-        }
-    }
-    async stopRobotKeyboard() {
-        try {
-            if (this.keyboardInterval) {
-                clearInterval(this.keyboardInterval);
-            }
-        }
-        catch (e) {
-            return e;
-        }
-    }
-    async startRobotMouse() {
-        try {
-            if (this.mouseInterval) {
-                clearInterval(this.mouseInterval);
-            }
-            this.mouseInterval = setInterval(() => {
-                this.drawCircle();
+            this.workProcessInterval = setInterval(() => {
+                this.startAnyEventMouseOrKeyboard();
             }, 1000 * 30);
         }
         catch (e) {
             return e;
         }
     }
-    async stopRobotMouse() {
+    async stopRobotRandomEvents() {
         try {
-            if (this.mouseInterval) {
-                clearInterval(this.mouseInterval);
+            if (this.workProcessInterval) {
+                clearInterval(this.workProcessInterval);
             }
         }
         catch (e) {
             return e;
         }
     }
-    sendRandomKeys() {
-        try {
-            robotjs_1.default.setKeyboardDelay(1000);
-            robotjs_1.default.typeString(config_1.config.random_words[Math.floor(Math.random() * config_1.config.random_words.length)]);
-            robotjs_1.default.keyTap('enter');
-            robotjs_1.default.keyTap('tab');
+    startAnyEventMouseOrKeyboard() {
+        this.counter++;
+        this.stopRobotRandomEvents();
+        if (this.counter % 2 === 0) {
+            this.drawCircle();
         }
-        catch (e) { }
+        else {
+            this.openNotepadAndType();
+        }
+        this.startRobotRandomEvents();
+    }
+    openNotepadAndType() {
+        robotjs_1.default.setKeyboardDelay(500);
+        robotjs_1.default.keyTap('r', 'command');
+        robotjs_1.default.typeString('notepad');
+        robotjs_1.default.keyTap('enter');
+        robotjs_1.default.setKeyboardDelay(0);
+        let randomNo = 4 + Math.ceil(Math.random() * 2);
+        for (let i = 0; i < randomNo; i++) {
+            let randomWord = config_1.config.random_words[Math.floor(Math.random() * config_1.config.random_words.length)];
+            robotjs_1.default.typeString(randomWord);
+        }
+        robotjs_1.default.keyTap('w', 'control');
+        robotjs_1.default.keyTap('right');
+        robotjs_1.default.keyTap('enter');
     }
     drawCircle() {
         try {

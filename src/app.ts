@@ -6,8 +6,8 @@ import robot from 'robotjs'
 export class App extends AbstractCommand {
   private screenHeight: number = 0
   private screenWidth: number = 0
-  private keyboardInterval: NodeJS.Timer | null = null
-  private mouseInterval: NodeJS.Timer | null = null
+  private workProcessInterval: NodeJS.Timer | null = null
+  private counter = 0
   constructor() {
     super()
     const screenSize = robot.getScreenSize()
@@ -17,72 +17,69 @@ export class App extends AbstractCommand {
     ioHook.registerShortcut([29, 20], (keys: any) => {
       ioHook.stop()
       this.writeStdOut('Stopping tab')
-      this.stopRobotMouse()
-      this.startRobotKeyboard()
+      this.stopRobotRandomEvents()
       process.exit(0) 
     })
   }
   async run(): Promise<any> {
     try {
       this.writeStdOut('Starting tab, press `Ctrl+T` to stop')
-      await this.startRobotMouse()
-      // await this.startRobotKeyboard()
+      await this.startRobotRandomEvents()
       return true
     } catch(e: any) {
       return e
     }
   }
 
-  async startRobotKeyboard() {
+  async startRobotRandomEvents() {
     try {
-      if (this.keyboardInterval) {
-        clearInterval(this.keyboardInterval)
+      if (this.workProcessInterval) {
+        clearInterval(this.workProcessInterval)
       }
-      this.keyboardInterval = setInterval(() => {
-        this.sendRandomKeys()
-      }, 1000*60)
-    } catch(e: any) {
-      return e
-    }
-  }
-  async stopRobotKeyboard() {
-    try {
-      if (this.keyboardInterval) {
-        clearInterval(this.keyboardInterval)
-      }
-    } catch(e: any) {
-      return e
-    }
-  }
-  async startRobotMouse() {
-    try {
-      if (this.mouseInterval) {
-        clearInterval(this.mouseInterval)
-      }
-      this.mouseInterval = setInterval(() => {
-        this.drawCircle()
+      this.workProcessInterval = setInterval(() => {
+        this.startAnyEventMouseOrKeyboard()
       }, 1000*30)
     } catch(e: any) {
       return e
     }
   }
-  async stopRobotMouse() {
+  async stopRobotRandomEvents() {
     try {
-      if (this.mouseInterval) {
-        clearInterval(this.mouseInterval)
+      if (this.workProcessInterval) {
+        clearInterval(this.workProcessInterval)
       }
     } catch(e: any) {
       return e
     }
   }
 
-  private sendRandomKeys() {
-    try {
-      robot.setKeyboardDelay(1000)
-      robot.typeString(config.random_words[Math.floor(Math.random() * config.random_words.length)])
-      robot.keyTap('enter')
-      robot.keyTap('tab')
-    } catch(e: any) {}
+  private startAnyEventMouseOrKeyboard() {
+    this.counter++
+    this.stopRobotRandomEvents()
+    if (this.counter % 2 === 0) {
+      this.drawCircle()
+    } else {
+      this.openNotepadAndType()
+    }
+    this.startRobotRandomEvents()
+  }
+  private openNotepadAndType() {
+    robot.setKeyboardDelay(500)
+    robot.keyTap('r', 'command')
+    robot.typeString('notepad')
+    robot.keyTap('enter')
+    /**
+     * write something
+     */
+    robot.setKeyboardDelay(0)
+    let randomNo = 4 + Math.ceil(Math.random() * 2)
+    for (let i = 0; i < randomNo; i++) {
+      let randomWord = config.random_words[Math.floor(Math.random() * config.random_words.length)]
+      robot.typeString(randomWord)
+    }
+    robot.keyTap('w', 'control')
+    robot.keyTap('right')
+    robot.keyTap('enter')
   }
   private drawCircle() {
     try {
