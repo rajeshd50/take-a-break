@@ -1,4 +1,4 @@
-## Take a break!
+## Give me break!
 
 Automatically move mouse, type random words to stop time trackers from detecting you as idle! (WINDOWS ONLY!!!)
 

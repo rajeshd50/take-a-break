@@ -1,6 +1,6 @@
 {
   "name": "give-me-break",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Give me a break from time trackers :-P",
   "main": "dist/bin.js",
   "engines": {
